@@ -1,11 +1,12 @@
 import requests
 import os
 
+# URL de l'API et clé d'autorisation
 API_URL = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50"
-# API key ajoutée directement ici
 headers = {"Authorization": "Bearer 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"}
 
 def query(filename):
+    """Envoie une image à l'API Hugging Face pour la détection d'objets."""
     # Vérifie si le fichier existe
     if not os.path.exists(filename):
         print(f"Erreur : Le fichier {filename} n'existe pas.")
@@ -25,9 +26,17 @@ def query(filename):
         return None
 
 # Nom du fichier image à analyser
-filename = "C:/Users/edoua/PycharmProjects/projet_IA/poisson.jpg"
+filename = "C:/Users/edoua/PycharmProjects/projet_IA/cats.jpg"
+
+# Appel de l'API et récupération des résultats
 output = query(filename)
 
-# Affiche le résultat si disponible
+# Traitement et affichage des résultats
 if output:
-    print("Résultat de l'API :", output)
+    print("Résultats de la détection :")
+    for detection in output:
+        label = detection.get("label", "Inconnu")  # Récupère le label (ou 'Inconnu' si absent)
+        score = detection.get("score", 0)         # Récupère le score (ou 0 si absent)
+        print(f"- Objet détecté : {label}, Score : {score:.2f}")
+else:
+    print("Aucun résultat à afficher.")
